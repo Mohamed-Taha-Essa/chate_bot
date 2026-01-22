@@ -1,0 +1,4 @@
+- first login to the system 
+- the user loged in can see all the other users in the system 
+- user can click on any user that apper and start conversation with it 
+- the conversation saved in db  and can be seen in the conversation tab 

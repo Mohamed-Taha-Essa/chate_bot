@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_socketio import SocketIO ,emit
 
 
@@ -11,7 +11,11 @@ def index():
     return render_template("index.html")
 
 
+@socketio.on('message')
+def handle_message(message):
+    print('message: ', message)
+    emit('message', {'text': message, 'sender': request.sid} ,broadcast=True)
 
 
 if __name__=='__main__':
-    socketio.run(app, debug=True,allow_unsafe_werkzeug=True)
+    socketio.run(app, debug=True)
