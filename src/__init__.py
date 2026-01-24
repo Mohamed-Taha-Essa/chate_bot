@@ -5,6 +5,7 @@ def create_app():
     app = Flask(__name__)
     
     # Configuration
+    app.config['SECRET_KEY'] = 'fb29fa17ba44c524be74e8dc042bc33631a8c9e064fb972e252a7b4e68c9e239'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
@@ -21,6 +22,7 @@ def create_app():
     from .models import User
     @login_manager.user_loader
     def load_user(user_id):
+        # since the user_id is just the primary key of our user table, use it in the query for the user
         return User.query.get(int(user_id))
     
     # Register blueprints
@@ -29,6 +31,9 @@ def create_app():
     
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+
+    from .sockets import chat as chat_blueprint
+    app.register_blueprint(chat_blueprint, url_prefix='/chat')
 
     # Load socket events
     from . import sockets

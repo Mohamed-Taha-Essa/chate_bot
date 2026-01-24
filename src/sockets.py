@@ -1,15 +1,16 @@
 # Main application routes (home, profile)
-from flask import Flask, render_template, request
-from flask_socketio import SocketIO ,emit
+from flask import Blueprint, render_template, request
+from flask_socketio import emit
+from .extention import socketio
+from .models import User
 
 
+chat = Blueprint('chat', __name__)
 
-app = Flask(__name__)
-socketio = SocketIO(app)
-
-@app.route('/')
-def index():
-    return render_template("index.html")
+@chat.route('/')
+def chathome():
+    users = User.query.all()
+    return render_template("chat.html", users=users)
 
 
 @socketio.on('message')
